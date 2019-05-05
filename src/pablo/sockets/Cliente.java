@@ -1,5 +1,11 @@
 package pablo.sockets;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import javax.swing.*;
 
 public class Cliente {
@@ -32,6 +38,9 @@ class MarcoCliente extends JFrame {
 
 class LaminaMarcoCliente extends JPanel {
 
+	private JTextField campo1;
+	private JButton miboton;
+
 	public LaminaMarcoCliente() {
 
 		JLabel texto = new JLabel("CLIENTE");
@@ -44,12 +53,36 @@ class LaminaMarcoCliente extends JPanel {
 
 		miboton = new JButton("Enviar");
 
+		// antes de agregar el boton (add)
+		EnviaTexto mi_evento = new EnviaTexto(); // evento
+		miboton.addActionListener(mi_evento); // el boton escucha el evento
+
 		add(miboton);
 
 	}
 
-	private JTextField campo1;
+	// clase interna, tiene el evento
+	private class EnviaTexto implements ActionListener {
 
-	private JButton miboton;
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
 
+			// System.out.println(campo1.getText());
+
+			/************************************************************
+			 * SOCKET
+			 ************************************************************/
+			try {
+				Socket mi_socket = new Socket("192.168.1.60", 9999);
+			} catch (UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				// e1.printStackTrace();
+				System.out.println(e1.getMessage());
+			}
+		}
+	}
 }
