@@ -2,6 +2,7 @@ package pablo.sockets;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -75,6 +76,14 @@ class LaminaMarcoCliente extends JPanel {
 			 ************************************************************/
 			try {
 				Socket mi_socket = new Socket("192.168.1.60", 9999);
+
+				// flujo de datos
+				DataOutputStream flujo_salida = new DataOutputStream(mi_socket.getOutputStream());
+
+				// pasar datos por el flujo
+				flujo_salida.writeUTF(campo1.getText());
+				flujo_salida.close();
+
 			} catch (UnknownHostException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

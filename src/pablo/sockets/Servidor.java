@@ -3,6 +3,9 @@ package pablo.sockets;
 import javax.swing.*;
 
 import java.awt.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.*;
 
 public class Servidor {
 
@@ -16,7 +19,7 @@ public class Servidor {
 	}
 }
 
-class MarcoServidor extends JFrame {
+class MarcoServidor extends JFrame implements Runnable {
 
 	public MarcoServidor() {
 
@@ -34,7 +37,46 @@ class MarcoServidor extends JFrame {
 
 		setVisible(true);
 
+		// hilo
+		Thread mi_hilo = new Thread(this);
+		mi_hilo.start();
+
 	}
 
 	private JTextArea areatexto;
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		// System.out.println("estoy escuchando");
+
+		/*******************************************************
+		 * servidor ******************************************************
+		 */
+
+		try {
+			// servidor
+			ServerSocket servidor = new ServerSocket(9999);
+
+			while (true) {
+				// aceptar conexiones del exterior
+				Socket mi_socket = servidor.accept();
+
+				// flujo de ingresao de datos
+				DataInputStream flujo_entrada = new DataInputStream(mi_socket.getInputStream());
+
+				// almacenar lo que recibe el flojo de entrada
+				String mensaje_flujo = flujo_entrada.readUTF();
+
+				// ver el texto
+				areatexto.append("\n" + mensaje_flujo);
+
+				// cierre de la conexion
+				mi_socket.close();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
