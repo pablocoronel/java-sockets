@@ -39,18 +39,28 @@ class MarcoCliente extends JFrame {
 
 class LaminaMarcoCliente extends JPanel {
 
-	private JTextField campo1;
+	private JTextField campo1, nick, ip;
 	private JButton miboton;
+	private JTextArea campoChat; // ver charla
 
 	public LaminaMarcoCliente() {
+		nick = new JTextField(5);
+		add(nick);
 
-		JLabel texto = new JLabel("CLIENTE");
+		JLabel texto = new JLabel("-CHAT-");
 
 		add(texto);
+
+		ip = new JTextField(8);
+		add(ip);
 
 		campo1 = new JTextField(20);
 
 		add(campo1);
+
+		campoChat = new JTextArea(12, 20);
+
+		add(campoChat);
 
 		miboton = new JButton("Enviar");
 
@@ -77,12 +87,17 @@ class LaminaMarcoCliente extends JPanel {
 			try {
 				Socket mi_socket = new Socket("192.168.1.60", 9999);
 
-				// flujo de datos
-				DataOutputStream flujo_salida = new DataOutputStream(mi_socket.getOutputStream());
+				PaqueteEnvio datos = new PaqueteEnvio();
+				datos.setNick(nick.getText());
+				datos.setIp(ip.getText());
+				datos.setMensaje(campo1.getText());
 
-				// pasar datos por el flujo
-				flujo_salida.writeUTF(campo1.getText());
-				flujo_salida.close();
+//				// flujo de datos
+//				DataOutputStream flujo_salida = new DataOutputStream(mi_socket.getOutputStream());
+//
+//				// pasar datos por el flujo
+//				flujo_salida.writeUTF(campo1.getText());
+//				flujo_salida.close();
 
 			} catch (UnknownHostException e1) {
 				// TODO Auto-generated catch block
@@ -94,4 +109,35 @@ class LaminaMarcoCliente extends JPanel {
 			}
 		}
 	}
+}
+
+class PaqueteEnvio {
+	private String nick;
+	private String ip;
+	private String mensaje;
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
 }
