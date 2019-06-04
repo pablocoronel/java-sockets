@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -92,6 +94,15 @@ class LaminaMarcoCliente extends JPanel {
 				datos.setIp(ip.getText());
 				datos.setMensaje(campo1.getText());
 
+				// flujo de datos
+				ObjectOutputStream paquete_datos = new ObjectOutputStream(mi_socket.getOutputStream());
+
+				// agregar datos
+				paquete_datos.writeObject(datos);
+
+				// cerrar soccket
+				mi_socket.close();
+
 //				// flujo de datos
 //				DataOutputStream flujo_salida = new DataOutputStream(mi_socket.getOutputStream());
 //
@@ -111,7 +122,8 @@ class LaminaMarcoCliente extends JPanel {
 	}
 }
 
-class PaqueteEnvio {
+// serializable, para poder enviarse como bites por la red
+class PaqueteEnvio implements Serializable {
 	private String nick;
 	private String ip;
 	private String mensaje;
