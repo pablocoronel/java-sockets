@@ -4,8 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -39,7 +41,7 @@ class MarcoCliente extends JFrame {
 
 }
 
-class LaminaMarcoCliente extends JPanel {
+class LaminaMarcoCliente extends JPanel implements Runnable {
 
 	private JTextField campo1, nick, ip;
 	private JButton miboton;
@@ -71,6 +73,9 @@ class LaminaMarcoCliente extends JPanel {
 		miboton.addActionListener(mi_evento); // el boton escucha el evento
 
 		add(miboton);
+
+		Thread mi_hilo = new Thread(this);
+		mi_hilo.start();
 
 	}
 
@@ -118,6 +123,32 @@ class LaminaMarcoCliente extends JPanel {
 				// e1.printStackTrace();
 				System.out.println(e1.getMessage());
 			}
+		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try {
+			ServerSocket servidor_cliente = new ServerSocket(9090);
+
+			Socket cliente;
+			PaqueteEnvio paqueteRecibido;
+
+			while (true) {
+				// acepta las entradas del exterior
+				cliente = servidor_cliente.accept();
+
+				ObjectInputStream flujo_entrada = new ObjectInputStream(cliente.getInputStream());
+
+				// reconstruccion del los datos recibidos
+				paqueteRecibido = (PaqueteEnvio) flujo_entrada.readObject();
+
+				campoChat.append("\n " + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.*;
 
@@ -86,6 +87,14 @@ class MarcoServidor extends JFrame implements Runnable {
 //				areatexto.append("\n" + mensaje_flujo);
 
 				areatexto.append("\n" + nick + ": " + mensaje + " para" + ip);
+
+				// socket por el cual el server le envia los datos al cliente destinatario
+				Socket enviarDestinatario = new Socket(ip, 9090);
+
+				ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviarDestinatario.getOutputStream());
+				paqueteReenvio.writeObject(paquete_recibido);
+
+				enviarDestinatario.close(); // cierre de socket de reenvio al destinatario
 
 				// cierre de la conexion
 				mi_socket.close();
