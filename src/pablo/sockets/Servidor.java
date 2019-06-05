@@ -94,6 +94,8 @@ class MarcoServidor extends JFrame implements Runnable {
 				ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviarDestinatario.getOutputStream());
 				paqueteReenvio.writeObject(paquete_recibido);
 
+				paqueteReenvio.close(); // cierre del flujo de datos
+
 				enviarDestinatario.close(); // cierre de socket de reenvio al destinatario
 
 				// cierre de la conexion

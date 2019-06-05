@@ -88,6 +88,8 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 
 			// System.out.println(campo1.getText());
 
+			campoChat.append("\n" + "Yo: " + campo1.getText());
+
 			/************************************************************
 			 * SOCKET
 			 ************************************************************/
