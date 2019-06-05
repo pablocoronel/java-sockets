@@ -70,15 +70,6 @@ class MarcoServidor extends JFrame implements Runnable {
 				// aceptar conexiones del exterior
 				Socket mi_socket = servidor.accept();
 
-				/***
-				 * Detecta usuarios cuando se conectan
-				 */
-				InetAddress localizacion = mi_socket.getInetAddress();
-
-				String ip_remota = localizacion.getHostAddress();
-				System.out.println(ip_remota);
-				/*****/
-
 				ObjectInputStream paquete_datos = new ObjectInputStream(mi_socket.getInputStream());
 				paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
 
@@ -95,20 +86,33 @@ class MarcoServidor extends JFrame implements Runnable {
 //				// ver el texto
 //				areatexto.append("\n" + mensaje_flujo);
 
-				areatexto.append("\n" + nick + ": " + mensaje + " para" + ip);
+				if (!mensaje.equals("online")) {
+					areatexto.append("\n" + nick + ": " + mensaje + " para" + ip);
 
-				// socket por el cual el server le envia los datos al cliente destinatario
-				Socket enviarDestinatario = new Socket(ip, 9090);
+					// socket por el cual el server le envia los datos al cliente destinatario
+					Socket enviarDestinatario = new Socket(ip, 9090);
 
-				ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviarDestinatario.getOutputStream());
-				paqueteReenvio.writeObject(paquete_recibido);
+					ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviarDestinatario.getOutputStream());
+					paqueteReenvio.writeObject(paquete_recibido);
 
-				paqueteReenvio.close(); // cierre del flujo de datos
+					paqueteReenvio.close(); // cierre del flujo de datos
 
-				enviarDestinatario.close(); // cierre de socket de reenvio al destinatario
+					enviarDestinatario.close(); // cierre de socket de reenvio al destinatario
 
-				// cierre de la conexion
-				mi_socket.close();
+					// cierre de la conexion
+					mi_socket.close();
+
+				} else {
+					/***
+					 * Detecta usuarios cuando se conectan
+					 */
+					InetAddress localizacion = mi_socket.getInetAddress();
+
+					String ip_remota = localizacion.getHostAddress();
+					System.out.println(ip_remota);
+					/*****/
+				}
+
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
