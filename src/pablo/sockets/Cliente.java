@@ -2,6 +2,8 @@ package pablo.sockets;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -37,6 +39,33 @@ class MarcoCliente extends JFrame {
 		add(milamina);
 
 		setVisible(true);
+
+		// aviso de conectado el cliente
+		addWindowListener(new EnvioOnline());
+	}
+
+}
+
+// gestiona el aviso al servidor de un nuevo cliente conectado
+class EnvioOnline extends WindowAdapter { // clase que sirve para implementar parcialmente una interface
+
+	// se ejecuta al abrir la ventana
+	public void windowOpened(WindowEvent e) {
+		try {
+			Socket mi_socket = new Socket("192.168.1.60", 9999);
+
+			// data
+			PaqueteEnvio datos = new PaqueteEnvio();
+			datos.setMensaje("online");
+
+			// flujo de datos
+			ObjectOutputStream paquete_datos = new ObjectOutputStream(mi_socket.getOutputStream());
+			paquete_datos.writeObject(datos); // escritura de datos
+
+			mi_socket.close(); // cierre del socket
+		} catch (Exception e2) {
+			// TODO: handle exception
+		}
 	}
 
 }

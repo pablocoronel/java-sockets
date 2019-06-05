@@ -70,6 +70,15 @@ class MarcoServidor extends JFrame implements Runnable {
 				// aceptar conexiones del exterior
 				Socket mi_socket = servidor.accept();
 
+				/***
+				 * Detecta usuarios cuando se conectan
+				 */
+				InetAddress localizacion = mi_socket.getInetAddress();
+
+				String ip_remota = localizacion.getHostAddress();
+				System.out.println(ip_remota);
+				/*****/
+
 				ObjectInputStream paquete_datos = new ObjectInputStream(mi_socket.getInputStream());
 				paquete_recibido = (PaqueteEnvio) paquete_datos.readObject();
 
