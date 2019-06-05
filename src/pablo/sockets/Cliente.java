@@ -43,19 +43,30 @@ class MarcoCliente extends JFrame {
 
 class LaminaMarcoCliente extends JPanel implements Runnable {
 
-	private JTextField campo1, nick, ip;
+	private JTextField campo1;
+	private JComboBox<String> ip;
+	private JLabel nick;
 	private JButton miboton;
 	private JTextArea campoChat; // ver charla
 
 	public LaminaMarcoCliente() {
-		nick = new JTextField(5);
+		String nick_usuario = JOptionPane.showInputDialog("Nick: ");
+
+		JLabel n_nick = new JLabel("Nick: ");
+		add(n_nick);
+
+		nick = new JLabel();
+		nick.setText(nick_usuario);
 		add(nick);
 
-		JLabel texto = new JLabel("-CHAT-");
+		JLabel texto = new JLabel("Online: ");
 
 		add(texto);
 
-		ip = new JTextField(8);
+		ip = new JComboBox<String>();
+		ip.addItem("usuario 1");
+		ip.addItem("usuario 2");
+		ip.addItem("usuario 3");
 		add(ip);
 
 		campo1 = new JTextField(20);
@@ -98,7 +109,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 
 				PaqueteEnvio datos = new PaqueteEnvio();
 				datos.setNick(nick.getText());
-				datos.setIp(ip.getText());
+				datos.setIp(ip.getSelectedItem().toString());
 				datos.setMensaje(campo1.getText());
 
 				// flujo de datos
