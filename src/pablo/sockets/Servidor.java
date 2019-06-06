@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.*;
+import java.util.ArrayList;
 
 public class Servidor {
 
@@ -66,6 +67,9 @@ class MarcoServidor extends JFrame implements Runnable {
 
 			PaqueteEnvio paquete_recibido;
 
+			// listado de ips de usuarios que se van conectando
+			ArrayList<String> listaIp = new ArrayList<String>();
+
 			while (true) {
 				// aceptar conexiones del exterior
 				Socket mi_socket = servidor.accept();
@@ -110,6 +114,16 @@ class MarcoServidor extends JFrame implements Runnable {
 
 					String ip_remota = localizacion.getHostAddress();
 					System.out.println(ip_remota);
+
+					listaIp.add(ip_remota);
+
+					// agregar al paquete
+					paquete_recibido.setIps(listaIp);
+
+					// ver en consola las ip
+					for (String z : listaIp) {
+						System.out.println("Array: " + z);
+					}
 					/*****/
 				}
 
