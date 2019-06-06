@@ -123,6 +123,18 @@ class MarcoServidor extends JFrame implements Runnable {
 					// ver en consola las ip
 					for (String z : listaIp) {
 						System.out.println("Array: " + z);
+						
+						Socket enviarDestinatario = new Socket(z, 9090);
+
+						ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviarDestinatario.getOutputStream());
+						paqueteReenvio.writeObject(paquete_recibido);
+
+						paqueteReenvio.close(); // cierre del flujo de datos
+
+						enviarDestinatario.close(); // cierre de socket de reenvio al destinatario
+
+						// cierre de la conexion
+						mi_socket.close();
 					}
 					/*****/
 				}

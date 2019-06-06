@@ -98,9 +98,9 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 //		ip.addItem("usuario 2");
 //		ip.addItem("usuario 3");
 
-		ip.addItem("192.168.1.60");
-		ip.addItem("192.168.1.61");
-		ip.addItem("192.168.1.62");
+//		ip.addItem("192.168.1.60");
+//		ip.addItem("192.168.1.61");
+//		ip.addItem("192.168.1.62");
 
 		add(ip);
 
@@ -192,7 +192,27 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 				// reconstruccion del los datos recibidos
 				paqueteRecibido = (PaqueteEnvio) flujo_entrada.readObject();
 
-				campoChat.append("\n " + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+				/**
+				 * si es la lista de ip's
+				 */
+				if (!paqueteRecibido.getMensaje().equals("online")) {
+					campoChat.append("\n " + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+				} else {
+					// listado dinamico de usuarios conectados
+					// campoChat.append("\n" + paqueteRecibido.getIps());
+
+					ArrayList<String> ips_menu = new ArrayList<String>();
+					ips_menu = paqueteRecibido.getIps();
+
+					// limpia el menu de usuarios
+					ip.removeAllItems();
+
+					// agrega las ip al menu desplegable
+					for (String z : ips_menu) {
+						ip.addItem(z);
+					}
+				}
+
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
